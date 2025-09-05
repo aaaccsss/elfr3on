@@ -1,39 +1,16 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "user.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "avatar.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "status.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "photo_2025-08-31_06-55-37.jpg",
-      "use": "@vercel/static"
-    }
+    { "src": "user.js", "use": "@vercel/node" },
+    { "src": "avatar.js", "use": "@vercel/node" },
+    { "src": "status.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/api/user/(.*)",
-      "dest": "/user.js"
-    },
-    {
-      "src": "/api/user/(.*)/avatar",
-      "dest": "/avatar.js"
-    },
-    {
-      "src": "/api/status",
-      "dest": "/status.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/api/support-notifications", "dest": "/user.js" },
+    { "src": "/api/user/(.*)/avatar", "dest": "/avatar.js" },
+    { "src": "/api/user/(.*)", "dest": "/user.js" },
+    { "src": "/api/status", "dest": "/status.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
