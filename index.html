@@ -87,7 +87,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align Hawkins: 0.3s ease;
         }
 
         .stats-box:hover {
@@ -102,12 +102,14 @@
             line-height: 1;
             color: inherit;
             white-space: nowrap;
+            user-select: none;
         }
 
         .stats-label {
             font-size: 0.875rem;
             color: inherit;
             margin-top: 0.25rem;
+            user-select: none;
         }
 
         .charge-button {
@@ -161,6 +163,7 @@
             padding: 1rem;
             text-align: center;
             color: #dbeafe;
+            user-select: none;
         }
 
         .coin-package:hover {
@@ -241,6 +244,7 @@
             cursor: pointer;
             border: none;
             transition: background-color 0.3s ease;
+            user-select: none;
         }
 
         .btn-confirm {
@@ -274,6 +278,7 @@
             50% { opacity: 0.7; transform: scale(1.05); }
         }
 
+        /* تحسين تصميم الشاشة المنبثقة */
         #supportPopup {
             position: fixed;
             inset: 0;
@@ -283,6 +288,7 @@
             justify-content: center;
             z-index: 1100;
             font-family: 'Cairo', sans-serif;
+            user-select: none;
         }
 
         #supportPopup.active {
@@ -425,7 +431,7 @@
     <div class="max-w-6xl mx-auto p-6">
         <header class="mb-10 text-center">
             <h1 class="text-5xl mb-2">مرحباً بك في وكالة الفرعون</h1>
-            <p class="text-lg text-gray-400 font-medium">شحن العملات بأسرع وأأمن طريقة</p>
+            <p class="text-lg text-gray-400 font-medium">شحن  بأسرع وأأمن طريقة</p>
         </header>
 
         <div id="serverStatus">
@@ -440,7 +446,7 @@
                     placeholder="أدخل اسم المستخدم (بدون @)"
                     class="custom-input flex-grow"
                 />
-                <button id="searchBtn" onclick="searchUser()" class="charge-button">
+                <button id="searchBtn" onclick="searchUser()">
                     <i class="fas fa-search ml-2"></i>بحث
                 </button>
             </div>
@@ -509,11 +515,11 @@
                 </div>
                 <div>
                     <h3 class="text-3xl font-bold mb-6 icon-yellow flex items-center gap-3">
-                        <i class="fas fa-coins"></i> شحن العملات
+                        <i class="fas fa-coins"></i> شحن 
                     </h3>
                     <div class="grid grid-cols-2 gap-6 mb-6">
                         <div class="coin-package" onclick="selectPackage(100, 0.10, this)">
-                            <img src="https://via.placeholder.com/48?text=100" alt="100 عملة" />
+                            <img src="photo_2025-08-31_06-55-37.jpg" alt="100 عملة" />
                             <div class="text-2xl font-bold text-yellow-400">100</div>
                             <div class="text-sm text-gray-300 mb-1">عملة</div>
                             <div class="text-lg font-bold text-green-400">$0.10</div>
@@ -523,7 +529,7 @@
                             </div>
                         </div>
                         <div class="coin-package" onclick="selectPackage(500, 0.50, this)">
-                            <img src="https://via.placeholder.com/48?text=500" alt="500 عملة" />
+                            <img src="photo_2025-08-31_06-55-37.jpg" alt="500 عملة" />
                             <div class="text-2xl font-bold text-yellow-400">500</div>
                             <div class="text-sm text-gray-300 mb-1">عملة</div>
                             <div class="text-lg font-bold text-green-400">$0.50</div>
@@ -533,7 +539,7 @@
                             </div>
                         </div>
                         <div class="coin-package" onclick="selectPackage(1000, 1.00, this)">
-                            <img src="https://via.placeholder.com/48?text=1000" alt="1000 عملة" />
+                            <img src="photo_2025-08-31_06-55-37.jpg" alt="1000 عملة" />
                             <div class="text-2xl font-bold text-yellow-400">1000</div>
                             <div class="text-sm text-gray-300 mb-1">عملة</div>
                             <div class="text-lg font-bold text-green-400">$1.00</div>
@@ -543,7 +549,7 @@
                             </div>
                         </div>
                         <div class="coin-package" onclick="selectPackage(5000, 5.00, this)">
-                            <img src="https://via.placeholder.com/48?text=5000" alt="5000 عملة" />
+                            <img src="photo_2025-08-31_06-55-37.jpg" alt="5000 عملة" />
                             <div class="text-2xl font-bold text-yellow-400">5000</div>
                             <div class="text-sm text-gray-300 mb-1">عملة</div>
                             <div class="text-lg font-bold text-green-400">$5.00</div>
@@ -627,7 +633,7 @@
         </div>
     </div>
 
-    <div id="paymentModal" class="fixed inset-0 payment-modal z-50 flex items-center justify-content hidden">
+    <div id="paymentModal" class="fixed inset-0 payment-modal z-50 flex items-center justify-center hidden">
         <div class="payment-content glass-effect">
             <div id="paymentStep1" class="payment-step active">
                 <i class="fab fa-cc-visa text-6xl text-blue-400 mb-4"></i>
@@ -666,8 +672,8 @@
         </div>
     </div>
 
-   <script>
-      const API_BASE = 'https://elfr3on-y8xg.vercel.app/'; // استبدل بـ URL بتاع Vercel بتاعك
+    <script>
+        const API_BASE = 'https://elfr3on-y8xg.vercel.app/'; 
         let isSearching = false;
         let currentUser = null;
         let selectedCoins = 0;
