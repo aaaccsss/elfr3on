@@ -1,15 +1,14 @@
 {
   "name": "tiktok-scraper",
   "version": "1.0.0",
-  "description": "TikTok user data scraper",
-  "main": "user.js",
   "scripts": {
-    "start": "node user.js"
+    "start": "vercel dev"
   },
   "dependencies": {
     "puppeteer-core": "^22.0.0",
     "@sparticuz/chromium": "^123.0.0",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "cors": "^2.8.5"
   }
 }
