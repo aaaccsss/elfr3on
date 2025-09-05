@@ -6,6 +6,7 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteerExtra.use(StealthPlugin());
 
 const cache = new Map();
+const CACHE_DURATION = 10 * 60 * 1000; // 10 دقايق
 
 async function getTikTokData(username) {
   let browser;
@@ -23,13 +24,14 @@ async function getTikTokData(username) {
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
     await page.setViewport({ width: 1366, height: 768 });
 
-    console.log(`📡 الاتصال بـ TikTok...`);
     await page.goto(`https://www.tiktok.com/@${username}`, {
       waitUntil: 'domcontentloaded',
-      timeout: 45000
+      timeout: 30000
     });
 
     console.log(`⏳ انتظار تحميل المحتوى...`);
+    await page.waitForTimeout(Math.random() * 3000 + 1500); // تأخير عشوائي عشان TikTok
+
     let attempts = 0;
     let dataFound = false;
     while (attempts < 5 && !dataFound) {
@@ -94,7 +96,7 @@ async function getTikTokData(username) {
         'img[alt*="avatar"]',
         'span[data-e2e="user-avatar"] img',
         'img[src*="tiktokcdn"]'
-      ]);
+      ]) || 'https://via.placeholder.com/150?text=User';
 
       const followers = getText([
         '[data-e2e="followers-count"]',
@@ -111,20 +113,19 @@ async function getTikTokData(username) {
         'strong[data-e2e="likes-count"]'
       ]) || '0';
 
-      const hasValidData = displayName !== 'غير محدد' || followers !== '0' || avatar !== null;
+      const verified = !!document.querySelector('[data-e2e="verify-badge"]');
 
       return {
         displayName,
-        username: username.replace('@', ''),
+        username,
         bio,
         avatar,
         followers,
         following,
         likes,
+        verified,
         scrapedAt: new Date().toISOString(),
-        success: hasValidData,
-        pageTitle: document.title,
-        url: window.location.href
+        success: displayName !== 'غير محدد' || followers !== '0' || avatar !== null
       };
     });
 
@@ -141,6 +142,7 @@ async function getTikTokData(username) {
       followers: 'غير متاح',
       following: 'غير متاح',
       likes: 'غير متاح',
+      verified: false,
       scrapedAt: new Date().toISOString(),
       success: false,
       error: error.message,
@@ -172,6 +174,7 @@ function renderUserPage(data, cached) {
       <p><strong>المتابعون:</strong> ${data.followers}</p>
       <p><strong>يتابع:</strong> ${data.following}</p>
       <p><strong>الإعجابات:</strong> ${data.likes}</p>
+      <p><strong>موثق:</strong> ${data.verified ? 'نعم' : 'لا'}</p>
       <img src="${data.avatar}" alt="صورة الملف الشخصي">
       <p><strong>تم الجلب في:</strong> ${data.scrapedAt}</p>
       <p><strong>من الـ Cache:</strong> ${cached ? 'نعم' : 'لا'}</p>
@@ -182,7 +185,15 @@ function renderUserPage(data, cached) {
 }
 
 module.exports = async (req, res) => {
-  const { username } = req.params || req.query;
+  res.setHeader('Access-Control-Allow-Origin', '*'); // دعم CORS
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+
+  // دعم endpoint الإشعارات
+  if (req.url.includes('/api/support-notifications')) {
+    return res.json({ type: 'support_notification', username: 'testuser', amount: Math.floor(Math.random() * 1000) });
+  }
+
+  const { username } = req.query || req.params || {};
   if (!username || username.length < 1) {
     return res.status(400).send(`
       <html>
@@ -208,7 +219,7 @@ module.exports = async (req, res) => {
 
   if (cache.has(cacheKey)) {
     const cached = cache.get(cacheKey);
-    if (Date.now() - cached.timestamp < 300000) {
+    if (Date.now() - cached.timestamp < CACHE_DURATION) {
       console.log(`📦 إرجاع بيانات محفوظة لـ ${cleanUsername}`);
       if (req.headers.accept && req.headers.accept.includes('text/html')) {
         return res.send(renderUserPage(cached.data, true));
